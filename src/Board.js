@@ -21,6 +21,19 @@ export default class Board extends React.Component {
       complete: React.createRef(),
     }
   }
+  componentDidMount(){
+    console.log("Mounted");
+    Dragula([document.querySelector('#id1'), document.querySelector('#id2'),document.querySelector('#id3')])
+    .on('drop', function (el, container, source) {
+      console.log(container.id, source.id);
+      if (container.id === 'id2'){
+      el.className = 'Card Card-blue';}
+      if (container.id === 'id3'){
+      el.className = 'Card Card-green';}
+      if (container.id === 'id1'){
+      el.className = 'Card Card-grey';}
+  });
+  }
   getClients() {
     return [
       ['1','Stark, White and Abbott','Cloned Optimal Architecture', 'in-progress'],
@@ -50,9 +63,9 @@ export default class Board extends React.Component {
       status: companyDetails[3],
     }));
   }
-  renderSwimlane(name, clients, ref) {
+  renderSwimlane(id, name, clients, ref) {
     return (
-      <Swimlane name={name} clients={clients} dragulaRef={ref}/>
+      <Swimlane containerId={id} name={name} clients={clients} dragulaRef={ref} className='container'/>
     );
   }
 
@@ -62,13 +75,13 @@ export default class Board extends React.Component {
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-4">
-              {this.renderSwimlane('Backlog', this.state.clients.backlog, this.swimlanes.backlog)}
+              {this.renderSwimlane("id1", 'Backlog', this.state.clients.backlog, this.swimlanes.backlog)}
             </div>
             <div className="col-md-4">
-              {this.renderSwimlane('In Progress', this.state.clients.inProgress, this.swimlanes.inProgress)}
+              {this.renderSwimlane('id2', 'Progress', this.state.clients.inProgress, this.swimlanes.inProgress)}
             </div>
             <div className="col-md-4">
-              {this.renderSwimlane('Complete', this.state.clients.complete, this.swimlanes.complete)}
+              {this.renderSwimlane('id3','Complete', this.state.clients.complete, this.swimlanes.complete)}
             </div>
           </div>
         </div>
